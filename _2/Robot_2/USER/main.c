@@ -77,36 +77,38 @@ void Init_1()	  												//初始化正转
 							int P1C	= P1 % 64000;
 							int P2C = P2 % 32000;
 							int P3C = P3 % 32000;
-							if(P1C<32000)
+
+							
+							if(P2C<16000)
 							{
-								P1 -= P1C;
+								P2 -= P2C;
 							}else
 							{
-								P1 += (64000 - P1C);
+								P2 += (32000 - P2C);
+								
+							}
+						
+								if(P3C<16000)
+							{
+								P3 -= P3C;
+							}else
+							{
+								P3 += (32000 - P3C);
 								
 							}
 							
 				
 							
-							P2 -= P2C;
-							P3 -= P3C;
-
-							if(P2>=0)
+							P1 -= P1C;
+							if(P1>=0)
 							{
-								P2 += 16000;
+								P1 += 32000;
 							}
 							else
 							{
-								P2 -= 16000;
+								P1 -= 32000;
 							}
-								if(P3>=0)
-							{
-								P3 += 16000;
-							}
-							else
-							{
-								P3 -= 16000;
-							}
+								
 		
 							
 							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,600,P1);
@@ -119,13 +121,7 @@ void Init_1()	  												//初始化正转
 void Init_4_5()	  												//初始化左右转
 {
 							Init_1();
-							int P1C	= P1 % 64000;
-//							int P2C = P2 % 32000;
-//							int P3C = P3 % 32000;
-							P1 -= P1C;
-//							P2 -= P2C;
-//							P3 -= P3C;
-							P1 += 8000;
+							P1 -= 8000;
 							P2 += 8000;
 							P3 -= 8000;
 							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,600,P1);
@@ -225,7 +221,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								Init_5_Flag = 0;
 							}
 							
-							if(Init_time >= 2000)
+							if(Init_time >= 150)
 							{
 								P1+=Speed*2;
 								P2+=Speed;
@@ -253,7 +249,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								Init_4_Flag = 1;
 								Init_5_Flag = 0;
 							}
-							if(Init_time >= 2000)
+							if(Init_time >= 200)
 							{
 								P2 +=Speed;
 								P3 -=Speed;
@@ -269,11 +265,10 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								Init_5_Flag = 1;
 							}
 							if(Init_time >= 200)
-						{
-							P2 -=Speed;
-							P3 +=Speed;
-						}
-					
+							{
+								P2 -=Speed;
+								P3 +=Speed;
+							}
 							
 						}
 							
@@ -851,27 +846,29 @@ int main()
 					
 					case 0:
 					{
-						//Mode = 0;
+						Mode = 3;
+						JDZ = P1;
 						break;
 					}
 					case 1:
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 3)
+						if(((P1-JDZ)/64000) >= 9)
 						{
 							X = P3;
 							Key = 2;
 						}
 						break;
 					}
+					
 					case 2:
 					{
 						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/32000)>=3)
+						if((abs(Y)/32000)>=4)
 						{
-							Key = 3;
 							JDZ = P1;
+							Key = 3;
 						}
 
 						break;
@@ -880,17 +877,90 @@ int main()
 					case 3:
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 3)
+						if(((P1-JDZ)/64000) >= 4)
 						{
+							X = P3;
+							Key = 4;
+
+						}
+						break;
+					}
+					
+					case 4:
+					{
+						Mode = 4;
+						Y = P3 - X;
+						if((abs(Y)/32000)>=4)
+						{
+							Key = 5;
+							JDZ = P1;
+						}
+
+						break;
+					}
+					
+					case 5:
+					{
+						Mode = 1;
+						if(((P1-JDZ)/64000) >= 4)
+						{
+							X = P3;
+							Key = 6;
+
+						}
+						break;
+					}
+					case 6:
+					{
+						Mode = 5;
+						Y = P3 - X;
+						if((abs(Y)/32000)>=8)
+						{
+							Key = 7;
+							JDZ = P1;
+						}
+						break;
+					}
+					
+						case 7:
+					{
+						Mode = 1;
+						if(((P1-JDZ)/64000) >= 9)
+						{
+							X = P3;
 							Key = 0;
 
 						}
 						break;
 					}
+
+						
+					
+					
+					
+					
+					
+					
+					
 				}
 		//Mode 	= 0;
 
-						
+						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
+					{
+						delay_ms(1);
+						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
+						{
+								Key = 0;
+						}
+					}
+					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+					{
+						delay_ms(1);
+						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+						{
+								Key = 6;
+						}
+					}
 
 							
 
