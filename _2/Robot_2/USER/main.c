@@ -23,6 +23,7 @@ double R_NOW = 0;
 short XW_NOW_X = 0;
 short XW_NOW_Y = 0;
 short XW_NOW_TIME = 0;
+
 #define R  1050                //650//平移倒角半径
 #define PI 3.1415926
 #define PULSE_1 4000						//目标脉冲数_1
@@ -54,12 +55,86 @@ short XW_NOW_TIME = 0;
   uint16_t CCR1_Val = 25;
 	uint16_t CCR2_Val = 4;
 	
-	#define            Speed         53
+	#define            Speed         160
 	
 	long 	P1 = 0;  //
 	long	P2 = 0;
 	long	P3 = 0;
 	char Mode = 0;  //表示四足运行状态
+	char Init_1_Flag = 0;
+	char Init_4_Flag = 0;
+	char Init_5_Flag = 0;
+	short SD = 600;
+	short Init_time = 0;
+	long X = 0;
+	long Y = 0;
+	int Key = 0;
+	long  JDZ = 0;
+void Init_1()	  												//初始化正转
+{
+
+
+							int P1C	= P1 % 64000;
+							int P2C = P2 % 32000;
+							int P3C = P3 % 32000;
+							if(P1C<32000)
+							{
+								P1 -= P1C;
+							}else
+							{
+								P1 += (64000 - P1C);
+								
+							}
+							
+				
+							
+							P2 -= P2C;
+							P3 -= P3C;
+
+							if(P2>=0)
+							{
+								P2 += 16000;
+							}
+							else
+							{
+								P2 -= 16000;
+							}
+								if(P3>=0)
+							{
+								P3 += 16000;
+							}
+							else
+							{
+								P3 -= 16000;
+							}
+		
+							
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,600,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,300,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,300,P3);
+							delay_ms(1);
+							Init_time = 0;
+	
+}
+void Init_4_5()	  												//初始化左右转
+{
+							Init_1();
+							int P1C	= P1 % 64000;
+//							int P2C = P2 % 32000;
+//							int P3C = P3 % 32000;
+							P1 -= P1C;
+//							P2 -= P2C;
+//							P3 -= P3C;
+							P1 += 8000;
+							P2 += 8000;
+							P3 -= 8000;
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,600,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,300,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,300,P3);
+							delay_ms(1);
+							Init_time = 0;
+}
+	
 void Timer5_Init(u16 arr)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
@@ -140,55 +215,77 @@ void TIM3_IRQHandler(void)   //TIM3中断
 						{
 							
 						}
-						else if(Mode == 1)			//正传
+						else if(Mode == 1)			//正转
 						{
-							P1+=Speed;
-							P2 = P1-16000;
-							int P2C = P2 % 32000;
-							int P3C = P3 % 32000;
-							P3 -= P3C;
-							P3 += P2C;
+							if(Init_1_Flag == 0)
+							{
+								Init_1();
+								Init_1_Flag = 1;
+								Init_4_Flag = 0;
+								Init_5_Flag = 0;
+							}
+							
+							if(Init_time >= 2000)
+							{
+								P1+=Speed*2;
+								P2+=Speed;
+								P3+=Speed;
+							}
 							
 						}
 						else if(Mode == 2)			//反转
 						{
-							P1-=Speed;
-							P2 = P1-16000;
-							int P2C = P2 % 32000;
-							int P3C = P3 % 32000;
-							P3 -= P3C;
-							P3 += P2C;
+		
 						}
 						else if(Mode == 3)			//复位
 						{
-							int Z = P1%16000;
-							P1 -= Z	;
-							P2 = P1-16000;
-							int P2C = P2 % 32000;
-							int P3C = P3 % 32000;
-							P3 -= P3C;
-							P3 += P2C;
+								Init_1();
+								Init_1_Flag = 0;
+								Init_4_Flag = 0;
+								Init_5_Flag = 0;
 						}
 						else if(Mode == 4)		//左转
 						{
-							int Z = P1%16000;
-							P1 -= Z	;
-							P2 +=Speed;
-							P2 -=Speed;
+							if(Init_4_Flag == 0)
+							{
+								Init_4_5();
+								Init_1_Flag = 0;
+								Init_4_Flag = 1;
+								Init_5_Flag = 0;
+							}
+							if(Init_time >= 2000)
+							{
+								P2 +=Speed;
+								P3 -=Speed;
+							}
 						}
 						else if(Mode == 5)		//右转
 						{
-							int Z = P1%16000;
-							P1 -= Z	;
+							if(Init_5_Flag == 0)
+							{
+								Init_4_5();
+								Init_1_Flag = 0;
+								Init_4_Flag = 0;
+								Init_5_Flag = 1;
+							}
+							if(Init_time >= 200)
+						{
 							P2 -=Speed;
-							P2 +=Speed;
+							P3 +=Speed;
+						}
+					
+							
 						}
 							
 						
 						
-									CAN_RoboModule_DRV_Position_Mode(0,1,MAX_PWM,P1);
-									CAN_RoboModule_DRV_Position_Mode(0,2,MAX_PWM,P2);
-									CAN_RoboModule_DRV_Position_Mode(0,3,MAX_PWM,P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,SD*2,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,SD,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,SD,P3);
+						if(Init_time<=200)
+						{
+							Init_time++;
+						}
 					}
 				
 
@@ -722,7 +819,7 @@ int main()
 		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 		GPIO_Config();																			//配置GPIO
 		printf_init();	
-		Timer3_Init(160);																		//驱动中断
+		Timer3_Init(100);																		//驱动中断
 		//Timer5_Init(5);																	//步进驱动定时器中断中断初始化	
 		//GENERAL_TIM_Init();																	//PWM 初始化
     CAN1_Configuration();                               //CAN1初始化
@@ -735,21 +832,67 @@ int main()
     delay_us(200);                                      //此处延时为了不让传回数据时候4个不一起传
     CAN_RoboModule_DRV_Config(0,3,250,0);               //3号驱动器配置为100ms传回一次数据
     delay_us(200);                                      //此处延时为了不让传回数据时候4个不一起传
-    CAN_RoboModule_DRV_Config(0,4,250,0);               //3号驱动器配置为100ms传回一次数据   
+   // CAN_RoboModule_DRV_Config(0,4,250,0);               //3号驱动器配置为100ms传回一次数据   
     CAN_RoboModule_DRV_Mode_Choice(0,0,Velocity_Position_Mode);  //0组的所有驱动器 都进入位置模式
     delay_ms(500);                                      //发送模式选择指令后，要等待驱动器进入模式就绪。所以延时也不可以去掉。
+		
+								Init_1();
+								Init_1_Flag = 0;
+								Init_4_Flag = 0;
+								Init_5_Flag = 0;
 		Init = 1;
-
-
+		
 		while(1)
 		{
 			
-		
-	
-		Mode 	= 0;
 
+				switch(Key)
+				{
+					
+					case 0:
+					{
+						//Mode = 0;
+						break;
+					}
+					case 1:
+					{
+						Mode = 1;
+						if(((P1-JDZ)/64000) >= 3)
+						{
+							X = P3;
+							Key = 2;
+						}
+						break;
+					}
+					case 2:
+					{
+						Mode = 4;
+						Y = P3 - X;
+						if((abs(Y)/32000)>=3)
+						{
+							Key = 3;
+							JDZ = P1;
+						}
 
+						break;
+					}
+					
+					case 3:
+					{
+						Mode = 1;
+						if(((P1-JDZ)/64000) >= 3)
+						{
+							Key = 0;
 
+						}
+						break;
+					}
+				}
+		//Mode 	= 0;
+
+						
+
+							
 
 
 			//printf("t\r\n ");
