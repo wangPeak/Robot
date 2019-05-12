@@ -1,3 +1,4 @@
+//自启动分支
 #include "main.h" 
 
 short MAX_PWM = 5000;  																//用于限制驱动器电压的PWM   5000表示  以最大电压运行
