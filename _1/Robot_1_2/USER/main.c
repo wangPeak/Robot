@@ -15,8 +15,10 @@ double QA = 0.0;  //设置角度
 double A = 0.0;  //当前运动角度
 
 
-char a = 0;			//切换电平
-int PULSE_NOW = 0;//当前脉冲数
+char a_1 = 0;			//切换电平
+char a_2 = 0;			//切换电平
+int PULSE_NOW_1 = 0;//当前脉冲数
+int PULSE_NOW_2 = 0;//当前脉冲数
 char a1 = 0;
 int b1 = 0;
 double R_NOW = 0;
@@ -25,8 +27,8 @@ short XW_NOW_Y = 0;
 short XW_NOW_TIME = 0;
 #define R  1050                //650//平移倒角半径
 #define PI 3.1415926
-#define PULSE_1 4000						//目标脉冲数_1
-#define PULSE_2 4000						//目标脉冲数_2
+#define PULSE_1   6530						//目标脉冲数_1
+#define PULSE_2   20000						//目标脉冲数_2
 #define Opposite  +										//         	+		-      	//取反方向
 #define Opposite_XW  <								//					<		>				//取反限位   限位应与方向相对应
 
@@ -129,7 +131,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 					
 					
 				
-					if(Init == 1 && !(Get_IO(4)) && RX_OK)
+					if(Init == 1 && !(Get_IO(6)) && RX_OK)
 					{
 						if(R_NOW < R)
 						{
@@ -191,37 +193,81 @@ void TIM5_IRQHandler(void)   //TIM5中断
 					if(Init == 1 && RX_OK)
 					{
 							
-							if(PULSE_NOW<=PULSE_1 && Get_IO(3))
+						if(PULSE_NOW_2<=10)
+							{
+								if(PULSE_NOW_1<=PULSE_1 && Get_IO(5))
 							{
 									GPIO_SetBits(GPIOC,GPIO_Pin_7);
-									if(a == 0)
+									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
-											a = 1;
+											a_1 = 1;
 									}
 									else
 									{
 											GPIO_ResetBits(GPIOC,GPIO_Pin_6);
-											PULSE_NOW++;
-											a = 0;
+											PULSE_NOW_1++;
+											a_1 = 0;
 									}
 
 							}
-							else if(PULSE_NOW >= 1 && !Get_IO(3))
+							else if(PULSE_NOW_1 >= 1 && !Get_IO(5))
 							{
 									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
-									if(a == 0)
+									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
-											a = 1;
+											a_1 = 1;
 									}
 									else
 									{
 											GPIO_ResetBits(GPIOC,GPIO_Pin_6);
-											PULSE_NOW--;
-											a = 0;
+											PULSE_NOW_1--;
+											a_1 = 0;
 									}
 							}
+							}
+							
+							
+							
+							
+							
+							if(PULSE_NOW_1>=6500 || PULSE_NOW_1<=3)
+							{
+								if(PULSE_NOW_2<=PULSE_2 && Get_IO(4))
+							{
+							
+									GPIO_SetBits(GPIOC,GPIO_Pin_12);
+									if(a_2 == 0)
+									{
+											GPIO_SetBits(GPIOC,GPIO_Pin_9);
+											a_2 = 1;
+									}
+									else
+									{
+											GPIO_ResetBits(GPIOC,GPIO_Pin_9);
+											PULSE_NOW_2++;
+											a_2 = 0;
+									}
+
+							}
+							else if(PULSE_NOW_2 >= 1 && !Get_IO(4))
+							{
+									GPIO_ResetBits(GPIOC,GPIO_Pin_12);
+									if(a_2 == 0)
+									{
+											GPIO_SetBits(GPIOC,GPIO_Pin_9);
+											a_2 = 1;
+									}
+									else
+									{
+											GPIO_ResetBits(GPIOC,GPIO_Pin_9);
+											PULSE_NOW_2--;
+											a_2 = 0;
+									}
+							}
+							}
+							
 							//					else{
 							//						TIM_Cmd(TIM5, DISABLE);
 							//					}
@@ -340,8 +386,14 @@ void GPIO_Config(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;        
     GPIO_Init(GPIOB, &GPIO_InitStructure);   
   
+	
+	GPIO_SetBits(GPIOB,GPIO_Pin_12);
+GPIO_SetBits(GPIOB,GPIO_Pin_13);
+GPIO_SetBits(GPIOB,GPIO_Pin_14);
+GPIO_SetBits(GPIOB,GPIO_Pin_15);
+
 		GPIO_InitStructure.GPIO_Pin = 0; 
-		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_6 | GPIO_Pin_7); 	
+		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_9 | GPIO_Pin_12); 	
 		GPIO_Init(GPIOC, &GPIO_InitStructure);  
 	
 		GPIO_InitStructure.GPIO_Pin = 0; 
@@ -367,6 +419,7 @@ void GPIO_Config(void)
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;  				//初始化串口三RX
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
     GPIO_Init(GPIOB, &GPIO_InitStructure); 	
+
 
 
   
@@ -774,7 +827,7 @@ int main()
 //			printf("ctrl_XY-X|%d\r\n",ctrl_XY.Velocity_RB-ctrl_X.Velocity_RB);
 //			printf("ctrl_XY-X|%d\r\n\r\n",ctrl_XY.Velocity_RF-ctrl_X.Velocity_RF);
 			
-			if(!Get_IO(4) && RX_OK)
+			if(!Get_IO(6) && RX_OK)
 			{
 						if(abs(A) <= 5)
 						{
@@ -891,17 +944,19 @@ int main()
 			
 			if(Get_IO(0))
 			{
-				GPIO_SetBits(GPIOB,GPIO_Pin_12);
+					GPIO_ResetBits(GPIOB,GPIO_Pin_12);
 			}
 			else{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_12);
+			
+				GPIO_SetBits(GPIOB,GPIO_Pin_12);
 			}
 			if(Get_IO(1))
 			{
-				GPIO_SetBits(GPIOB,GPIO_Pin_13);
+				GPIO_ResetBits(GPIOB,GPIO_Pin_13);
 			}
 			else{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+				
+				GPIO_SetBits(GPIOB,GPIO_Pin_13);
 			}
 			if(Get_IO(2))
 			{
@@ -910,7 +965,13 @@ int main()
 			else{
 				GPIO_ResetBits(GPIOB,GPIO_Pin_14);
 			}
-
+			if(Get_IO(3))
+			{
+				GPIO_SetBits(GPIOB,GPIO_Pin_15);
+			}
+			else{
+				GPIO_ResetBits(GPIOB,GPIO_Pin_15);
+			}
 			
 	
 	

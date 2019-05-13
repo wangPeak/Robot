@@ -76,7 +76,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 						}
 					
 					
-					short X = 0x01F0;
+					short X = 0x01FC;
 					u8 String[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 					String[0] = (char)0xFA;
 					String[1] = (char)0xAF;
@@ -89,7 +89,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 					String[9] =	 car.Velocity_RF & 0xff;
 					String[8] = (car.Velocity_RF >> 8) & 0xff;
 
-					String[10] = String[10] | ((GPIOA->IDR & X)>>4);
+					String[10] = String[10] | ((GPIOA->IDR & X)>>2);
 					
 					String[12] =  car.X & 0xff;
 					String[11] = (car.X >> 8) & 0xff;
@@ -270,7 +270,7 @@ void GPIO_Config(void)
 		GPIO_Init(GPIOG, &GPIO_InitStructure); 
 		  
 		GPIO_InitStructure.GPIO_Pin = 0; 
-		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8);
+		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8);
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 		GPIO_Init(GPIOA, &GPIO_InitStructure); 
 		
