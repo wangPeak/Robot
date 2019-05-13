@@ -72,6 +72,8 @@ short XW_NOW_TIME = 0;
 	long Y = 0;
 	int Key = 0;
 	long  JDZ = 0;
+	int RST = 0;
+	char make = 0;			//等待行至山顶区标志
 void Init_1()	  												//初始化正转
 {
 
@@ -853,6 +855,7 @@ int main()
 					
 					case 0:
 					{
+						
 						if(Init_0_Flag == 0)
 						{
 							Mode = 3;
@@ -860,7 +863,7 @@ int main()
 						}
 						break;
 					}
-					case 1:
+					case 1:																			//直行
 					{
 						Mode = 1;
 						if(((P1-JDZ)/64000) >= 9)
@@ -871,7 +874,7 @@ int main()
 						break;
 					}
 					
-					case 2:
+					case 2:																		//左转
 					{
 						Mode = 4;
 						Y = P3 - X;
@@ -884,7 +887,7 @@ int main()
 						break;
 					}
 					
-					case 3:
+					case 3:																//直行跨沙丘
 					{
 						Mode = 1;
 						if(((P1-JDZ)/64000) >= 4)
@@ -896,7 +899,7 @@ int main()
 						break;
 					}
 					
-					case 4:
+					case 4:															//左转
 					{
 						Mode = 4;
 						Y = P3 - X;
@@ -909,7 +912,7 @@ int main()
 						break;
 					}
 					
-					case 5:
+					case 5:													//直行
 					{
 						Mode = 1;
 						if(((P1-JDZ)/64000) >= 4)
@@ -920,7 +923,7 @@ int main()
 						}
 						break;
 					}
-					case 6:
+					case 6:													//右转
 					{
 						Mode = 5;
 						Y = P3 - X;
@@ -932,17 +935,54 @@ int main()
 						break;
 					}
 					
-						case 7:
+						case 7:												//直行
 					{
 						Mode = 1;
 						if(((P1-JDZ)/64000) >= 9)
 						{
 							X = P3;
 							Key = 0;
+							make = 1;
 
 						}
 						break;
 					}
+					case 8:														//RST
+					{
+						Mode = 1;
+						if(((P1-JDZ)/64000) >= 2)
+						{
+							X = P3;
+							Key = RST;
+
+						}
+						break;
+					}
+					case 9:														//行至山顶区
+					{
+						Mode = 1;
+						if(((P1-JDZ)/64000) >= 9)
+						{
+							X = P3;
+							Key = 10;
+
+						}
+						break;
+					}
+					case 10:													//右转
+					{
+						Mode = 5;
+						Y = P3 - X;
+						if((abs(Y)/32000)>=8)
+						{
+							GPIO_SetBits(GPIOB,GPIO_Pin_12);
+							JDZ = P1;
+							delay_ms(1000);
+							Key = 0;
+						}
+						break;
+					}
+					
 
 						
 					
@@ -955,22 +995,72 @@ int main()
 				}
 		//Mode 	= 0;
 
-						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
+						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))			//启动
 					{
 						delay_ms(1);
 						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 						{
 								Init_0_Flag = 0;
-								Key = 0;
+								make = 0;
+								Key = 1;
 						}
 					}
-					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))			//停止
 					{
 						delay_ms(1);
 						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 						{
-								Key = 6;
+								Key = 0;
 						}
+					}
+					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6))  //复位1
+					{
+						delay_ms(1);
+						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6))
+						{
+								
+								JDZ = P1;
+								RST = 2;
+								Key = 8;
+								make = 0;
+						}
+					}
+					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))			//复位2
+					{
+						delay_ms(1);
+						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
+						{
+								JDZ = P1;
+								RST = 4;
+								Key = 8;
+								make = 0;
+						}
+					}
+					if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))    //行至山顶区
+					{
+						if(make == 1)
+						{
+								delay_ms(1);
+								if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
+								{
+										JDZ = P1;
+										Key = 9;
+								}
+						}
+						
+					}
+					if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_15) && Init_0_Flag == 1)    //令牌启动
+					{
+						
+								delay_ms(500);
+								if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
+								{
+										Init_0_Flag = 0;
+										make = 0;
+										Key = 1;
+								}
+						
+						
 					}
 
 							

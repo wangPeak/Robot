@@ -28,8 +28,8 @@ short XW_NOW_Y = 0;
 short XW_NOW_TIME = 0;
 #define R  1050                //650//平移倒角半径
 #define PI 3.1415926
-#define PULSE_1   6530						//目标脉冲数_1
-#define PULSE_2   20000						//目标脉冲数_2
+#define PULSE_1   3530						//目标脉冲数_1
+#define PULSE_2   5000						//目标脉冲数_2
 #define Opposite  +										//         	+		-      	//取反方向
 #define Opposite_XW  <								//					<		>				//取反限位   限位应与方向相对应
 
@@ -194,11 +194,12 @@ void TIM5_IRQHandler(void)   //TIM5中断
 					if(Init == 1 && RX_OK)
 					{
 							
-						if(PULSE_NOW_2<=10)
+						if(PULSE_NOW_2<=5)
 							{
 								if(PULSE_NOW_1<=PULSE_1 && Get_IO(5))
 							{
-									GPIO_SetBits(GPIOC,GPIO_Pin_7);
+									
+									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
 									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
@@ -214,7 +215,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 							}
 							else if(PULSE_NOW_1 >= 1 && !Get_IO(5))
 							{
-									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
+									GPIO_SetBits(GPIOC,GPIO_Pin_7);
 									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
@@ -233,7 +234,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 							
 							
 							
-							if(PULSE_NOW_1>=6500 || PULSE_NOW_1<=3)
+							if(PULSE_NOW_1>=3525)
 							{
 								if(PULSE_NOW_2<=PULSE_2 && Get_IO(4))
 							{

@@ -190,6 +190,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>Key</ItemText>
         </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Init_0_Flag</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
