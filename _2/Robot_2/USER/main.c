@@ -79,25 +79,25 @@ void Init_1()	  												//初始化正转
 
 
 							int P1C	= P1 % 64000;
-							int P2C = P2 % 32000;
-							int P3C = P3 % 32000;
+							int P2C = P2 % 64000;
+							int P3C = P3 % 64000;
 
 							
-							if(P2C<16000)
+							if(P2C<32000)
 							{
 								P2 -= P2C;
 							}else
 							{
-								P2 += (32000 - P2C);
+								P2 += (64000 - P2C);
 								
 							}
 						
-								if(P3C<16000)
+								if(P3C<32000)
 							{
 								P3 -= P3C;
 							}else
 							{
-								P3 += (32000 - P3C);
+								P3 += (64000 - P3C);
 								
 							}
 							
@@ -115,9 +115,9 @@ void Init_1()	  												//初始化正转
 								
 		
 							
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,200,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,100,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,100,P3);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,400,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,400,P3);
 							delay_ms(1);
 							Init_time = 0;
 	
@@ -126,11 +126,11 @@ void Init_4_5()	  												//初始化左右转
 {
 							Init_1();
 							P1 -= 8000;
-							P2 += 8000;
-							P3 -= 8000;
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,200,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,100,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,100,P3);
+							P2 += 16000;
+							P3 -= 16000;
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,400,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,400,P3);
 							delay_ms(1);
 							Init_time = 0;
 }
@@ -227,7 +227,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 							
 							if(Init_time >= 200)
 							{
-								P1+=Speed*2;
+								P1+=Speed;
 								P2+=Speed;
 								P3+=Speed;
 							}
@@ -277,10 +277,14 @@ void TIM3_IRQHandler(void)   //TIM3中断
 						}
 							
 						
-						
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,SD*2,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,SD,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,SD,P3);
+						 
+						 if(Init_time >= 200)
+							{
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,SD,P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,SD,-P2);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,SD,P3);
+							}
+							
 						if(Init_time<=200)
 						{
 							Init_time++;
@@ -835,11 +839,11 @@ int main()
     CAN_RoboModule_DRV_Mode_Choice(0,0,Velocity_Position_Mode);  //0组的所有驱动器 都进入位置模式
     delay_ms(500);                                      //发送模式选择指令后，要等待驱动器进入模式就绪。所以延时也不可以去掉。
 								P1 = 0;
-								P2 = 16000;
-								P3 = 16000;
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,200,P1);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,100,-P2);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,100,P3);
+								P2 = 32000;
+								P3 = 32000;
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,400,-P2);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,400,P3);
 								Init_0_Flag = 1;
 								Init_1_Flag = 0;
 								Init_4_Flag = 0;
