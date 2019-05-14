@@ -56,7 +56,7 @@ short XW_NOW_TIME = 0;
   uint16_t CCR1_Val = 25;
 	uint16_t CCR2_Val = 4;
 	
-	#define            Speed         160
+	#define            Speed         100
 	
 	long 	P1 = 0;  //
 	long	P2 = 0;
@@ -115,9 +115,9 @@ void Init_1()	  												//初始化正转
 								
 		
 							
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,200,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,200,P3);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,200,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,100,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,100,P3);
 							delay_ms(1);
 							Init_time = 0;
 	
@@ -128,9 +128,9 @@ void Init_4_5()	  												//初始化左右转
 							P1 -= 8000;
 							P2 += 8000;
 							P3 -= 8000;
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,200,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,200,P3);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,200,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,100,-P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,100,P3);
 							delay_ms(1);
 							Init_time = 0;
 }
@@ -837,9 +837,9 @@ int main()
 								P1 = 0;
 								P2 = 16000;
 								P3 = 16000;
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,200,-P2);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,200,P3);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,200,P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,100,-P2);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,100,P3);
 								Init_0_Flag = 1;
 								Init_1_Flag = 0;
 								Init_4_Flag = 0;
@@ -975,7 +975,7 @@ int main()
 						Y = P3 - X;
 						if((abs(Y)/32000)>=8)
 						{
-							GPIO_SetBits(GPIOB,GPIO_Pin_12);
+							GPIO_SetBits(GPIOB,GPIO_Pin_13);
 							JDZ = P1;
 							delay_ms(1000);
 							Key = 0;

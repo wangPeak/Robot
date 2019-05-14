@@ -104,7 +104,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 						USART3_Sned_Char_Buff(String,16);
 						SD = 0;
 					}
-					if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) && SD <= 5)
+					if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) && SD <= 1)
 					{
 						USART3_Sned_Char_Buff(String,16);
 						SD++;
