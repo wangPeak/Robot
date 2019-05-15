@@ -997,7 +997,7 @@ int main()
 					
 					
 				}
-		//Mode 	= 0;
+		// 	= 0;
 
 						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))			//启动
 					{
