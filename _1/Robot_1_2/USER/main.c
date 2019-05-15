@@ -3,7 +3,7 @@
 
 short MAX_PWM = 5000;  																//用于限制驱动器电压的PWM   5000表示  以最大电压运行
 extern __IO uint16_t ADC_ConvertedValue[NOFCHANEL];  	//存放读取到的ADC值
-extern Ctrl car ;
+extern Ctrl car ;  //手动控制
 extern char RX_OK ;
 
 
@@ -28,11 +28,12 @@ short XW_NOW_Y = 0;
 short XW_NOW_TIME = 0;
 #define R  1050                //650//平移倒角半径
 #define PI 3.1415926
-#define PULSE_1   3530						//目标脉冲数_1
+#define PULSE_1   3700						//目标脉冲数_1
 #define PULSE_2   5000						//目标脉冲数_2
-#define Opposite  +										//         	+		-      	//取反方向
-#define Opposite_XW  <								//					<		>				//取反限位   限位应与方向相对应
-
+#define Opposite  +												//         	+		-      	//取反方向
+#define Opposite_XW  <										//					<		>				//取反限位   限位应与方向相对应
+#define Opposite_SD  -										//         	+		-      	//取反方向
+#define Opposite_QJ  <										//         	+		-      	//取反方向
 
 
 // TIM4 输出比较通道1
@@ -199,7 +200,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 								if(PULSE_NOW_1<=PULSE_1 && Get_IO(5))
 							{
 									
-									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
+									GPIO_SetBits(GPIOC,GPIO_Pin_7);
 									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
@@ -215,7 +216,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 							}
 							else if(PULSE_NOW_1 >= 1 && !Get_IO(5))
 							{
-									GPIO_SetBits(GPIOC,GPIO_Pin_7);
+									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
 									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
@@ -876,14 +877,14 @@ int main()
 					if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8) && !GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_15))
 					{
 						
-						if(car.X < 0 && car.Y Opposite_XW 0)
+						if(car.X Opposite_QJ 0 && car.Y Opposite_XW 0)
 						{
 							car.Velocity_LF = 0;
 							car.Velocity_LB = 0;
 							car.Velocity_RB = 0;
 							car.Velocity_RF = 0;
 						}
-						else if(car.X < 0)
+						else if(car.X Opposite_QJ 0)
 						{
 							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
 							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
@@ -904,7 +905,7 @@ int main()
 					}
 					else if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
 					{
-						if(car.X<0)
+						if(car.X Opposite_QJ 0)
 						{
 							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
 							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
@@ -931,10 +932,10 @@ int main()
 					}
 
 					
-					CAN_RoboModule_DRV_Velocity_Mode(0,1,MAX_PWM,Opposite  car.Velocity_LF);
-					CAN_RoboModule_DRV_Velocity_Mode(0,2,MAX_PWM,Opposite -car.Velocity_LB);
-					CAN_RoboModule_DRV_Velocity_Mode(0,3,MAX_PWM,Opposite -car.Velocity_RB);
-					CAN_RoboModule_DRV_Velocity_Mode(0,4,MAX_PWM,Opposite  car.Velocity_RF);
+					CAN_RoboModule_DRV_Velocity_Mode(0,1,MAX_PWM,Opposite_SD  car.Velocity_LF);
+					CAN_RoboModule_DRV_Velocity_Mode(0,2,MAX_PWM,Opposite_SD -car.Velocity_LB);
+					CAN_RoboModule_DRV_Velocity_Mode(0,3,MAX_PWM,Opposite_SD -car.Velocity_RB);
+					CAN_RoboModule_DRV_Velocity_Mode(0,4,MAX_PWM,Opposite_SD  car.Velocity_RF);
 
 
 

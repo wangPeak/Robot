@@ -56,8 +56,10 @@ short XW_NOW_TIME = 0;
   uint16_t CCR1_Val = 25;
 	uint16_t CCR2_Val = 4;
 	
-	#define            Speed         100
-	
+	int 	Speed = 400;
+	int 	Speed_1 = 400;
+	int 	Speed_2 = 400;
+	int 	Speed_3 = 400;
 	long 	P1 = 0;  //
 	long	P2 = 0;
 	long	P3 = 0;
@@ -66,7 +68,7 @@ short XW_NOW_TIME = 0;
 	char Init_4_Flag = 0;
 	char Init_5_Flag = 0;
 	char Init_0_Flag = 0;
-	short SD = 600;
+	short SD = 1500;
 	short Init_time = 0;
 	long X = 0;
 	long Y = 0;
@@ -74,6 +76,13 @@ short XW_NOW_TIME = 0;
 	long  JDZ = 0;
 	int RST = 0;
 	char make = 0;			//等待行至山顶区标志
+	int temp = 4000;
+	
+	
+	long C1 = 0;
+	long C2 = 0;
+	long C3 = 0;
+		long AA = 0;
 void Init_1()	  												//初始化正转
 {
 
@@ -115,9 +124,10 @@ void Init_1()	  												//初始化正转
 								
 		
 							
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,400,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,400,P3);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,600,-P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,4,MAX_PWM,600,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,600,P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,600,-P3);
 							delay_ms(1);
 							Init_time = 0;
 	
@@ -125,12 +135,13 @@ void Init_1()	  												//初始化正转
 void Init_4_5()	  												//初始化左右转
 {
 							Init_1();
-							P1 -= 8000;
+							P1 -= temp;
 							P2 += 16000;
 							P3 -= 16000;
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,400,-P2);
-							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,400,P3);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,1000,-P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,4,MAX_PWM,1000,P1);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,600,P2);
+							CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,600,-P3);
 							delay_ms(1);
 							Init_time = 0;
 }
@@ -211,6 +222,50 @@ void TIM3_IRQHandler(void)   //TIM3中断
 				
 					if(Init == 1)
 					{
+								int C1T = (P1 % 64000);
+								int C2T = (P2 % 64000);
+								int C3T = (P3 % 64000);
+									if(C1T>=16000 && C1T<=48000)
+									{
+										C1 = ((16000 - abs((32000 - C1T)))/100)*4;
+									}else
+									{
+										C1 = 0;
+									}
+									if(C2T>=16000 && C2T<=48000)
+									{
+										C2 = ((16000 - abs((32000 - C2T)))/100)*4;
+									}else
+									{
+										C2 = 0;
+									}
+									if(C3T>=16000 && C3T<=48000)
+									{
+										C3 = ((16000 - abs((32000 - C3T)))/100)*4;
+									}else
+									{
+										C3 = 0;
+									}
+									
+									if(C1>=1)
+									{
+											Speed_1 = Speed - Speed / (SD/C1);
+									}else
+									{
+										Speed_1 = Speed;
+									}
+									
+									if(C2>=1)
+									{
+											Speed_2 = Speed - Speed / (SD/C2);
+									}else
+									{
+										Speed_2 = Speed;
+									}
+									
+
+						
+						
 						if(Mode == 0)						//停止
 						{
 							
@@ -227,9 +282,9 @@ void TIM3_IRQHandler(void)   //TIM3中断
 							
 							if(Init_time >= 200)
 							{
-								P1+=Speed;
-								P2+=Speed;
-								P3+=Speed;
+								P1 += Speed_1;
+								P2 += Speed_2;
+								P3 += Speed_2;
 							}
 							
 						}
@@ -255,8 +310,8 @@ void TIM3_IRQHandler(void)   //TIM3中断
 							}
 							if(Init_time >= 200)
 							{
-								P2 +=Speed;
-								P3 -=Speed;
+								P2 += Speed_2;
+								P3 -= Speed_2;
 							}
 						}
 						else if(Mode == 5)		//右转
@@ -270,8 +325,8 @@ void TIM3_IRQHandler(void)   //TIM3中断
 							}
 							if(Init_time >= 200)
 							{
-								P2 -=Speed;
-								P3 +=Speed;
+								P2 -= Speed_2;
+								P3 += Speed_2;
 							}
 							
 						}
@@ -280,9 +335,11 @@ void TIM3_IRQHandler(void)   //TIM3中断
 						 
 						 if(Init_time >= 200)
 							{
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,SD,P1);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,SD,-P2);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,SD,P3);
+								
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,(SD-C1),-P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,4,MAX_PWM,(SD-C1),P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,(SD-C2),P2);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,(SD-C3),-P3);
 							}
 							
 						if(Init_time<=200)
@@ -835,24 +892,26 @@ int main()
     delay_us(200);                                      //此处延时为了不让传回数据时候4个不一起传
     CAN_RoboModule_DRV_Config(0,3,250,0);               //3号驱动器配置为100ms传回一次数据
     delay_us(200);                                      //此处延时为了不让传回数据时候4个不一起传
+		CAN_RoboModule_DRV_Config(0,4,250,0);               //3号驱动器配置为100ms传回一次数据
+    delay_us(200);                                      //此处延时为了不让传回数据时候4个不一起传
    // CAN_RoboModule_DRV_Config(0,4,250,0);               //3号驱动器配置为100ms传回一次数据   
     CAN_RoboModule_DRV_Mode_Choice(0,0,Velocity_Position_Mode);  //0组的所有驱动器 都进入位置模式
     delay_ms(500);                                      //发送模式选择指令后，要等待驱动器进入模式就绪。所以延时也不可以去掉。
 								P1 = 0;
 								P2 = 32000;
 								P3 = 32000;
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,400,P1);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,400,-P2);
-								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,400,P3);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,1,MAX_PWM,600,-P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,4,MAX_PWM,600,P1);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,2,MAX_PWM,600,P2);
+								CAN_RoboModule_DRV_Velocity_Position_Mode(0,3,MAX_PWM,600,-P3);
 								Init_0_Flag = 1;
 								Init_1_Flag = 0;
 								Init_4_Flag = 0;
 								Init_5_Flag = 0;
 		Init = 1;
-		
 		while(1)
 		{
-			
+
 
 				switch(Key)
 				{
@@ -880,9 +939,9 @@ int main()
 					
 					case 2:																		//左转
 					{
-						Mode = 4;
+						Mode = 5;
 						Y = P3 - X;
-						if((abs(Y)/32000)>=4)
+						if((abs(Y)/64000)>=4)
 						{
 							JDZ = P1;
 							Key = 3;
@@ -894,7 +953,7 @@ int main()
 					case 3:																//直行跨沙丘
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 4)
+						if(((P1-JDZ)/64000) >= 6)
 						{
 							X = P3;
 							Key = 4;
@@ -905,9 +964,9 @@ int main()
 					
 					case 4:															//左转
 					{
-						Mode = 4;
+						Mode = 5;
 						Y = P3 - X;
-						if((abs(Y)/32000)>=4)
+						if((abs(Y)/64000)>=5)
 						{
 							Key = 5;
 							JDZ = P1;
@@ -929,9 +988,9 @@ int main()
 					}
 					case 6:													//右转
 					{
-						Mode = 5;
+						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/32000)>=8)
+						if((abs(Y)/64000)>=14)
 						{
 							Key = 7;
 							JDZ = P1;
@@ -951,7 +1010,7 @@ int main()
 						}
 						break;
 					}
-					case 8:														//RST
+					case 8:														//RST 
 					{
 						Mode = 1;
 						if(((P1-JDZ)/64000) >= 2)
@@ -975,9 +1034,9 @@ int main()
 					}
 					case 10:													//右转
 					{
-						Mode = 5;
+						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/32000)>=8)
+						if((abs(Y)/64000)>=8)
 						{
 							GPIO_SetBits(GPIOB,GPIO_Pin_13);
 							JDZ = P1;
@@ -1011,7 +1070,7 @@ int main()
 					}
 					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))			//停止
 					{
-						delay_ms(1);
+						delay_us(300);
 						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 						{
 								Key = 0;
@@ -1024,7 +1083,7 @@ int main()
 						{
 								
 								JDZ = P1;
-								RST = 2;
+								RST = 3;
 								Key = 8;
 								make = 0;
 						}
@@ -1035,7 +1094,7 @@ int main()
 						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 						{
 								JDZ = P1;
-								RST = 4;
+								RST = 5;
 								Key = 8;
 								make = 0;
 						}
@@ -1057,7 +1116,7 @@ int main()
 					{
 						
 								delay_ms(500);
-								if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
+								if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_15))
 								{
 										Init_0_Flag = 0;
 										make = 0;
