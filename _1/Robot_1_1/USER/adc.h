@@ -45,8 +45,8 @@
 #define    ADC_DMA_CHANNEL               DMA1_Channel1
 #define    ADC_DMA_CLK                   RCC_AHBPeriph_DMA1
 
-#define    MAX_Velocity     1000
-#define    MIN_Velocity    -1000  
+#define    MAX_Velocity     1500
+#define    MIN_Velocity    -1500  
 
  
 void ADCx_Init(void);

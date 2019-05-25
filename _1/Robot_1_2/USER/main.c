@@ -932,13 +932,20 @@ int main()
 					}
 					else if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_15))
 					{
-						if(car.Y Opposite_XW 0)
+						
+						if(car.X > 0)
 						{
+							if(!Get_IO(1))
+							{
+								GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
+							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
+							car.Velocity_RB = (ctrl_X_Y.Velocity_RB - ctrl_X.Velocity_RB);
+							car.Velocity_RF = (ctrl_X_Y.Velocity_RF - ctrl_X.Velocity_RF);
+							}
 							
-							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_Y.Velocity_LF);
-							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_Y.Velocity_LB);
-							car.Velocity_RB = (ctrl_X_Y.Velocity_RB - ctrl_Y.Velocity_RB);
-							car.Velocity_RF = (ctrl_X_Y.Velocity_RF - ctrl_Y.Velocity_RF);
+							
+
 							
 
 						}
@@ -962,12 +969,9 @@ int main()
 			{
 					if(Get_IO(1))
 					{
-					GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-					}
-					else{
-
 					GPIO_SetBits(GPIOB,GPIO_Pin_13);
 					}
+
 
 			}
 			

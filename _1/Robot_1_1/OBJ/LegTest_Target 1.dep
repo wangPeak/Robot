@@ -34,7 +34,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\USART3.h)(0x5CB47F70)
 F (..\USER\stm32f10x_it.c)(0x5CB47F70)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_it.o --omf_browse ..\obj\stm32f10x_it.crf --depend ..\obj\stm32f10x_it.d)
 I (..\USER\stm32f10x_it.h)(0x5CB47F70)
@@ -193,7 +193,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\USART3.h)(0x5CB47F70)
 F (..\USER\delay.h)(0x5CB47F70)()
 F (..\USER\delay.c)(0x5CB47F70)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\delay.o --omf_browse ..\obj\delay.crf --depend ..\obj\delay.d)
@@ -231,7 +231,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\USART3.h)(0x5CB47F70)
 F (..\USER\can.c)(0x5CB47F70)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\can.o --omf_browse ..\obj\can.crf --depend ..\obj\can.d)
 I (..\USER\main.h)(0x5CB47F70)
@@ -268,12 +268,12 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\USART3.h)(0x5CB47F70)
 F (..\USER\can.h)(0x5CB47F70)()
 F (..\USER\main.h)(0x5CB47F70)()
 F (..\USER\adc.c)(0x5CB47F70)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\adc.o --omf_browse ..\obj\adc.crf --depend ..\obj\adc.d)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\main.h)(0x5CB47F70)
 I (..\USER\stm32f10x.h)(0x5CB47F70)
 I (..\CORE\core_cm3.h)(0x5CB47F71)
@@ -309,10 +309,10 @@ I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
 I (..\USER\USART3.h)(0x5CB47F70)
-F (..\USER\adc.h)(0x5CB47F70)()
+F (..\USER\adc.h)(0x5CE0135D)()
 F (..\USER\ctrl.c)(0x5CDE5AC1)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\ctrl.o --omf_browse ..\obj\ctrl.crf --depend ..\obj\ctrl.d)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\main.h)(0x5CB47F70)
 I (..\USER\stm32f10x.h)(0x5CB47F70)
 I (..\CORE\core_cm3.h)(0x5CB47F71)
@@ -385,7 +385,7 @@ I (..\USER\printf.h)(0x5CB47F70)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\USART3.h)(0x5CB47F70)
 F (..\USER\timer.c)(0x5CB47F70)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\timer.o --omf_browse ..\obj\timer.crf --depend ..\obj\timer.d)
 I (..\USER\timer.h)(0x5CB47F70)
@@ -423,7 +423,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 I (..\USER\USART3.h)(0x5CB47F70)
 F (..\USER\dma.h)(0x5CB47F70)()
 F (..\USER\timer.h)(0x5CB47F70)()
@@ -463,7 +463,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\USER\delay.h)(0x5CB47F70)
 I (..\USER\can.h)(0x5CB47F70)
 I (..\USER\ctrl.h)(0x5CC01981)
-I (..\USER\adc.h)(0x5CB47F70)
+I (..\USER\adc.h)(0x5CE0135D)
 F (..\USER\USART3.h)(0x5CB47F70)()
 F (..\CORE\core_cm3.c)(0x5CB47F71)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\core_cm3.o --omf_browse ..\obj\core_cm3.crf --depend ..\obj\core_cm3.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)

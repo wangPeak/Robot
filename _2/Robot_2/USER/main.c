@@ -938,7 +938,7 @@ int main()
 					case 1:																			//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 10)
+						if(((P1-JDZ)/64000) >= 12)
 						{
 							X = P3;
 							Key = 2;
@@ -950,7 +950,7 @@ int main()
 					{
 						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=4)
+						if((abs(Y)/64000)>=5)
 						{
 							JDZ = P1;
 							Key = 3;
@@ -987,7 +987,7 @@ int main()
 					case 5:													//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 3)
+						if(((P1-JDZ)/64000) >= 4)
 						{
 							X = P3;
 							Key = 6;
@@ -1010,7 +1010,7 @@ int main()
 						case 7:												//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 7)
+						if(((P1-JDZ)/64000) >= 10)
 						{
 							X = P3;
 							Key = 0;
@@ -1022,7 +1022,7 @@ int main()
 					case 8:														//RST 
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 1)
+						if(((P1-JDZ)/64000) >= 2)
 						{
 							X = P3;
 							Key = RST;
@@ -1033,7 +1033,7 @@ int main()
 					case 9:														//行至山顶区
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 10)
+						if(((P1-JDZ)/64000) >= 12)
 						{
 							X = P3;
 							GPIO_SetBits(GPIOB,GPIO_Pin_13);
@@ -1106,7 +1106,7 @@ int main()
 						if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
 						{
 								JDZ = P1;
-								RST = 5;
+								RST = 7;
 								Key = 8;
 								make = 0;
 						}
