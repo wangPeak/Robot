@@ -1,4 +1,4 @@
-//比赛前的最后分支
+//省赛红色方分支
 #include "main.h" 
 
 short MAX_PWM = 5000;  																//用于限制驱动器电压的PWM   5000表示  以最大电压运行
@@ -56,10 +56,10 @@ short XW_NOW_TIME = 0;
   uint16_t CCR1_Val = 25;
 	uint16_t CCR2_Val = 4;
 	
-	int 	Speed = 400;
-	int 	Speed_1 = 400;
-	int 	Speed_2 = 400;
-	int 	Speed_3 = 400;
+	int 	  Speed = 500;
+	int 	Speed_1 = 500;
+	int 	Speed_2 = 500;
+	int 	Speed_3 = 500;
 	long 	P1 = 0;  //
 	long	P2 = 0;
 	long	P3 = 0;
@@ -68,7 +68,7 @@ short XW_NOW_TIME = 0;
 	char Init_4_Flag = 0;
 	char Init_5_Flag = 0;
 	char Init_0_Flag = 0;
-	short SD = 1500;
+	short SD = 1800;
 	short Init_time = 0;
 	long X = 0;
 	long Y = 0;
@@ -82,7 +82,7 @@ short XW_NOW_TIME = 0;
 	long C1 = 0;
 	long C2 = 0;
 	long C3 = 0;
-		long AA = 0;//4右转
+		long AA = 0;
 void Init_1()	  												//初始化正转
 {
 
@@ -227,21 +227,21 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								int C3T = (P3 % 64000);
 									if(C1T>=16000 && C1T<=48000)
 									{
-										C1 = ((16000 - abs((32000 - C1T)))/100)*4;
+										C1 = ((16000 - abs((32000 - C1T)))/100)*5;
 									}else
 									{
 										C1 = 0;
 									}
 									if(C2T>=16000 && C2T<=48000)
 									{
-										C2 = ((16000 - abs((32000 - C2T)))/100)*4;
+										C2 = ((16000 - abs((32000 - C2T)))/100)*5;
 									}else
 									{
 										C2 = 0;
 									}
 									if(C3T>=16000 && C3T<=48000)
 									{
-										C3 = ((16000 - abs((32000 - C3T)))/100)*4;
+										C3 = ((16000 - abs((32000 - C3T)))/100)*5 ;
 									}else
 									{
 										C3 = 0;
@@ -299,7 +299,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								Init_4_Flag = 0;
 								Init_5_Flag = 0;
 						}
-						else if(Mode == 4)		//右转
+						else if(Mode == 4)		//左转
 						{
 							if(Init_4_Flag == 0)
 							{
@@ -314,7 +314,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								P3 -= Speed_2;
 							}
 						}
-						else if(Mode == 5)		//左转
+						else if(Mode == 5)		//右转
 						{
 							if(Init_5_Flag == 0)
 							{
@@ -881,6 +881,7 @@ void CLOSE2(void)
 
 }
 int main()
+
 {
 	
 		
@@ -946,11 +947,11 @@ int main()
 						break;
 					}
 					
-					case 2:																		//右转
+					case 2:																		//左转
 					{
-						Mode = 4;
+						Mode = 5;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=5)
+						if((abs(Y)/64000)>=6)
 						{
 							JDZ = P1;
 							Key = 3;
@@ -962,7 +963,7 @@ int main()
 					case 3:																//直行跨沙丘
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 6)
+						if(((P1-JDZ)/64000) >= 10)
 						{
 							X = P3;
 							Key = 4;
@@ -971,11 +972,11 @@ int main()
 						break;
 					}
 					
-					case 4:															//右转
+					case 4:															//左转
 					{
-						Mode = 4;
+						Mode = 5;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=4)
+						if((abs(Y)/64000)>=6)
 						{
 							Key = 5;
 							JDZ = P1;
@@ -995,9 +996,9 @@ int main()
 						}
 						break;
 					}
-					case 6:													//左转
+					case 6:													//右转
 					{
-						Mode = 5;
+						Mode = 4;
 						Y = P3 - X;
 						if((abs(Y)/64000)>=12)
 						{
@@ -1010,7 +1011,7 @@ int main()
 						case 7:												//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 10)
+						if(((P1-JDZ)/64000) >= 12)
 						{
 							X = P3;
 							Key = 0;
@@ -1019,7 +1020,7 @@ int main()
 						}
 						break;
 					}
-					case 8:														//RST 
+					case 8:														//RST 直行
 					{
 						Mode = 1;
 						if(((P1-JDZ)/64000) >= 2)
@@ -1033,7 +1034,7 @@ int main()
 					case 9:														//行至山顶区
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 12)
+						if(((P1-JDZ)/64000) >= 10)
 						{
 							X = P3;
 							GPIO_SetBits(GPIOB,GPIO_Pin_13);
@@ -1041,14 +1042,15 @@ int main()
 							Mode = 3;
 							Key = 0;
 
+							
 						}
 						break;
 					}
-					case 10:													//左转
+					case 10:													//右转
 					{
-						Mode = 5;
+						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=12)
+						if((abs(Y)/64000)>=8)
 						{
 							GPIO_SetBits(GPIOB,GPIO_Pin_13);
 							JDZ = P1;
