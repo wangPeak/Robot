@@ -57,10 +57,10 @@ Ctrl P_Vector()
 {
 	Ctrl ctrl;  
 	short P = (ADC_To_Velocity(ADC_ConvertedValue[3])-Init_P);
-	ctrl.Velocity_LB = -P;
-	ctrl.Velocity_LF = P;
-	ctrl.Velocity_RB = -P;
-	ctrl.Velocity_RF = P;
+	ctrl.Velocity_LB = P;
+	ctrl.Velocity_LF = -P;
+	ctrl.Velocity_RB = P;
+	ctrl.Velocity_RF = -P;
 	ctrl.P = P;
 	return ctrl;
 }

@@ -82,7 +82,7 @@ short XW_NOW_TIME = 0;
 	long C1 = 0;
 	long C2 = 0;
 	long C3 = 0;
-		long AA = 0;
+		long AA = 0;//4右转
 void Init_1()	  												//初始化正转
 {
 
@@ -299,7 +299,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								Init_4_Flag = 0;
 								Init_5_Flag = 0;
 						}
-						else if(Mode == 4)		//左转
+						else if(Mode == 4)		//右转
 						{
 							if(Init_4_Flag == 0)
 							{
@@ -314,7 +314,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								P3 -= Speed_2;
 							}
 						}
-						else if(Mode == 5)		//右转
+						else if(Mode == 5)		//左转
 						{
 							if(Init_5_Flag == 0)
 							{
@@ -524,10 +524,19 @@ void GPIO_Config(void)
 		GPIO_Init(GPIOA, &GPIO_InitStructure); 
 		
 		GPIO_InitStructure.GPIO_Pin = 0; 
-		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_8 | GPIO_Pin_15);     //定位限位开关 8 == X; 15 == Y;
+		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_8 | GPIO_Pin_15);     //定位限位开关 8 == X; 15 == Y;//G8不能用
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 		GPIO_Init(GPIOG, &GPIO_InitStructure); 
 		
+		GPIO_InitStructure.GPIO_Pin = 0; 
+		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_9);     //定位限位开关 8 == X; 15 == Y;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+		GPIO_Init(GPIOB, &GPIO_InitStructure); 
+		
+//		GPIO_InitStructure.GPIO_Pin = 0; 
+//		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_8);     //定位限位开关 8 == X; 15 == Y;
+//		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+//		GPIO_Init(GPIOG, &GPIO_InitStructure); 
 
 
   
@@ -929,7 +938,7 @@ int main()
 					case 1:																			//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 9)
+						if(((P1-JDZ)/64000) >= 10)
 						{
 							X = P3;
 							Key = 2;
@@ -937,9 +946,9 @@ int main()
 						break;
 					}
 					
-					case 2:																		//左转
+					case 2:																		//右转
 					{
-						Mode = 5;
+						Mode = 4;
 						Y = P3 - X;
 						if((abs(Y)/64000)>=4)
 						{
@@ -962,11 +971,11 @@ int main()
 						break;
 					}
 					
-					case 4:															//左转
+					case 4:															//右转
 					{
-						Mode = 5;
+						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=5)
+						if((abs(Y)/64000)>=4)
 						{
 							Key = 5;
 							JDZ = P1;
@@ -978,7 +987,7 @@ int main()
 					case 5:													//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 4)
+						if(((P1-JDZ)/64000) >= 3)
 						{
 							X = P3;
 							Key = 6;
@@ -986,11 +995,11 @@ int main()
 						}
 						break;
 					}
-					case 6:													//右转
+					case 6:													//左转
 					{
-						Mode = 4;
+						Mode = 5;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=14)
+						if((abs(Y)/64000)>=12)
 						{
 							Key = 7;
 							JDZ = P1;
@@ -1001,7 +1010,7 @@ int main()
 						case 7:												//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 9)
+						if(((P1-JDZ)/64000) >= 7)
 						{
 							X = P3;
 							Key = 0;
@@ -1013,7 +1022,7 @@ int main()
 					case 8:														//RST 
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 2)
+						if(((P1-JDZ)/64000) >= 1)
 						{
 							X = P3;
 							Key = RST;
@@ -1024,19 +1033,22 @@ int main()
 					case 9:														//行至山顶区
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 9)
+						if(((P1-JDZ)/64000) >= 10)
 						{
 							X = P3;
-							Key = 10;
+							GPIO_SetBits(GPIOB,GPIO_Pin_13);
+							JDZ = P1;
+							Mode = 3;
+							Key = 0;
 
 						}
 						break;
 					}
-					case 10:													//右转
+					case 10:													//左转
 					{
-						Mode = 4;
+						Mode = 5;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=8)
+						if((abs(Y)/64000)>=12)
 						{
 							GPIO_SetBits(GPIOB,GPIO_Pin_13);
 							JDZ = P1;
@@ -1088,10 +1100,10 @@ int main()
 								make = 0;
 						}
 					}
-					else if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))			//复位2
+					else if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))			//复位2
 					{
 						delay_ms(1);
-						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
+						if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
 						{
 								JDZ = P1;
 								RST = 5;
@@ -1099,12 +1111,12 @@ int main()
 								make = 0;
 						}
 					}
-					if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))    //行至山顶区
+					if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))    //行至山顶区
 					{
 						if(make == 1)
 						{
 								delay_ms(1);
-								if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
+								if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 								{
 										JDZ = P1;
 										Key = 9;
@@ -1112,10 +1124,13 @@ int main()
 						}
 						
 					}
+					
+
+					
 					if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_15) && Init_0_Flag == 1)    //令牌启动
 					{
 						
-								delay_ms(500);
+								delay_ms(1000);
 								if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_15))
 								{
 										Init_0_Flag = 0;

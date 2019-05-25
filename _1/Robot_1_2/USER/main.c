@@ -28,11 +28,11 @@ short XW_NOW_Y = 0;
 short XW_NOW_TIME = 0;
 #define R  1050                //650//平移倒角半径
 #define PI 3.1415926
-#define PULSE_1   3700						//目标脉冲数_1
-#define PULSE_2   5000						//目标脉冲数_2
+#define PULSE_1   3900						//目标脉冲数_1
+#define PULSE_2   4850						//目标脉冲数_2
 #define Opposite  +												//         	+		-      	//取反方向
 #define Opposite_XW  <										//					<		>				//取反限位   限位应与方向相对应
-#define Opposite_SD  -										//         	+		-      	//取反方向
+#define Opposite_SD  +										//         	+		-      	//取反方向
 #define Opposite_QJ  <										//         	+		-      	//取反方向
 
 
@@ -200,7 +200,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 								if(PULSE_NOW_1<=PULSE_1 && Get_IO(5))
 							{
 									
-									GPIO_SetBits(GPIOC,GPIO_Pin_7);
+									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
 									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
@@ -216,7 +216,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 							}
 							else if(PULSE_NOW_1 >= 1 && !Get_IO(5))
 							{
-									GPIO_ResetBits(GPIOC,GPIO_Pin_7);
+									GPIO_SetBits(GPIOC,GPIO_Pin_7);
 									if(a_1 == 0)
 									{
 											GPIO_SetBits(GPIOC,GPIO_Pin_6);
@@ -834,19 +834,19 @@ int main()
 			{
 						if(abs(A) <= 5)
 						{
-										if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
+										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 										{
 												delay_ms(2);
-												if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
+												if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 												{
 													QA = -90;
 												}
 
 										}
-										if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 										{
 												delay_ms(2);
-												if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+												if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 												{
 													QA = 90;
 												}
@@ -855,10 +855,14 @@ int main()
 						}
 						if(abs(A) >= 85)
 						{
-										if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) || GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
+										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) || !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 										{
 												delay_ms(2);
-												if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) || GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
+											if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) && !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
+											{
+												
+											}
+												else if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) || !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 												{
 													QA = 0;
 												}
@@ -903,6 +907,16 @@ int main()
 
 						
 					}
+					else if(Get_IO(0))
+					{
+							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
+							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
+							car.Velocity_RB = (ctrl_X_Y.Velocity_RB - ctrl_X.Velocity_RB);
+							car.Velocity_RF = (ctrl_X_Y.Velocity_RF - ctrl_X.Velocity_RF);
+							XW_NOW_X = 0;
+							XW_NOW_TIME = 0;
+
+					}
 					else if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
 					{
 						if(car.X Opposite_QJ 0)
@@ -944,23 +958,29 @@ int main()
 				R_NOW = 0;
 			}
 										
-			
-			if(Get_IO(0))
+			if(PULSE_NOW_2<=5)
 			{
-					GPIO_ResetBits(GPIOB,GPIO_Pin_12);
+					if(Get_IO(1))
+					{
+					GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+					}
+					else{
+
+					GPIO_SetBits(GPIOB,GPIO_Pin_13);
+					}
+
 			}
-			else{
 			
-				GPIO_SetBits(GPIOB,GPIO_Pin_12);
-			}
-			if(Get_IO(1))
-			{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-			}
-			else{
+				if(Get_IO(4) && PULSE_NOW_1>=3900&& PULSE_NOW_2>=2300)
+				{
+						GPIO_ResetBits(GPIOB,GPIO_Pin_12);
+				}
+				if(!Get_IO(4) && PULSE_NOW_1>=3900)
+				{
+					GPIO_SetBits(GPIOB,GPIO_Pin_12);
 				
-				GPIO_SetBits(GPIOB,GPIO_Pin_13);
-			}
+				}
+
 			if(Get_IO(2))
 			{
 				GPIO_SetBits(GPIOB,GPIO_Pin_14);
