@@ -26,7 +26,7 @@ double R_NOW = 0;
 short XW_NOW_X = 0;
 short XW_NOW_Y = 0;
 short XW_NOW_TIME = 0;
-#define R  1050                //650//平移倒角半径
+#define R  1500                //650//平移倒角半径
 #define PI 3.1415926
 #define PULSE_1   3900						//目标脉冲数_1
 #define PULSE_2   5250						//目标脉冲数_2
@@ -137,7 +137,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 					{
 						if(R_NOW < R)
 						{
-							R_NOW += 50.0;
+							R_NOW += 37.5;
 						}
 						
 
@@ -145,7 +145,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 							{					
 								if(abs(A)< 22.5 || abs(A)> 67.5 )
 								{
-									A+=4;
+									A+=3;
 								}
 								else
 								{
@@ -157,7 +157,7 @@ void TIM3_IRQHandler(void)   //TIM3中断
 							{
 								if(abs(A)< 22.5 || abs(A)> 67.5 )
 								{
-									A-=4;
+									A-=3;
 								}
 								else
 								{
@@ -269,6 +269,29 @@ void TIM5_IRQHandler(void)   //TIM5中断
 											a_2 = 0;
 									}
 							}
+							}
+							
+							
+							
+							
+							if(PULSE_NOW_1 >= PULSE_1)
+							{
+									if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8))
+									{
+											GPIO_ResetBits(GPIOC,GPIO_Pin_7);
+											if(a_1 == 0)
+											{
+													GPIO_SetBits(GPIOC,GPIO_Pin_6);
+													a_1 = 1;
+											}
+											else
+											{
+													GPIO_ResetBits(GPIOC,GPIO_Pin_6);
+													a_1 = 0;
+											}
+									}
+
+
 							}
 							
 							//					else{
@@ -395,6 +418,7 @@ GPIO_SetBits(GPIOB,GPIO_Pin_13);
 GPIO_SetBits(GPIOB,GPIO_Pin_14);
 GPIO_SetBits(GPIOB,GPIO_Pin_15);
 
+
 		GPIO_InitStructure.GPIO_Pin = 0; 
 		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_9 | GPIO_Pin_12); 	
 		GPIO_Init(GPIOC, &GPIO_InitStructure);  
@@ -404,7 +428,7 @@ GPIO_SetBits(GPIOB,GPIO_Pin_15);
 		GPIO_Init(GPIOG, &GPIO_InitStructure); 
 		  
 		GPIO_InitStructure.GPIO_Pin = 0; 
-		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7);
+		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8);
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 		GPIO_Init(GPIOA, &GPIO_InitStructure); 
 		
@@ -412,6 +436,10 @@ GPIO_SetBits(GPIOB,GPIO_Pin_15);
 		GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_8 | GPIO_Pin_15);     //定位限位开关 8 == X; 15 == Y;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 		GPIO_Init(GPIOG, &GPIO_InitStructure); 
+		
+
+		
+		
 		
 		GPIO_InitStructure.GPIO_Pin = 0; 
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10; 	     		//初始化串口三TX
@@ -778,7 +806,7 @@ int main()
 		printf_init();	
 		delay_ms(5000);	
 		Init_Wifi();																				//WIFI初始化
-		Timer3_Init(150);																		//自动控制定时器中断中断初始化
+		Timer3_Init(75);																		//自动控制定时器中断中断初始化
 		Timer5_Init(5);																	//步进驱动定时器中断中断初始化	
 		//GENERAL_TIM_Init();																	//PWM 初始化
     CAN1_Configuration();                               //CAN1初始化
@@ -836,7 +864,7 @@ int main()
 						{
 										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 										{
-												delay_ms(2);
+												delay_ms(1);
 												if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 												{
 													QA = -90;
@@ -845,7 +873,7 @@ int main()
 										}
 										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 										{
-												delay_ms(2);
+												delay_ms(1);
 												if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 												{
 													QA = 90;
@@ -857,7 +885,7 @@ int main()
 						{
 										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) || !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 										{
-												delay_ms(2);
+												delay_ms(1);
 											if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) && !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 											{
 												
