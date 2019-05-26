@@ -118,11 +118,11 @@ Section Cross References
     main.o(i.main) refers to ctrl.o(i.Vector_S_X_Y_N) for Vector_S_X_Y_N
     main.o(i.main) refers to ctrl.o(i.Vector_S_X) for Vector_S_X
     main.o(i.main) refers to ctrl.o(i.Vector_S_Y) for Vector_S_Y
-    main.o(i.main) refers to stm32f10x_gpio.o(i.GPIO_ResetBits) for GPIO_ResetBits
     main.o(i.main) refers to can.o(i.CAN_RoboModule_DRV_Velocity_Mode) for CAN_RoboModule_DRV_Velocity_Mode
     main.o(i.main) refers to main.o(.data) for Init
     main.o(i.main) refers to usart3.o(.data) for RX_OK
     main.o(i.main) refers to ctrl.o(.bss) for car
+    main.o(i.main) refers to stm32f10x_gpio.o(i.GPIO_ResetBits) for GPIO_ResetBits
     system_stm32f10x.o(i.SetSysClock) refers to system_stm32f10x.o(i.SetSysClockTo72) for SetSysClockTo72
     system_stm32f10x.o(i.SystemCoreClockUpdate) refers to system_stm32f10x.o(.data) for SystemCoreClock
     system_stm32f10x.o(i.SystemInit) refers to system_stm32f10x.o(i.SetSysClock) for SetSysClock
@@ -1437,15 +1437,15 @@ Image Symbol Table
     i.delay_us                               0x0800316c   Section        0  delay.o(i.delay_us)
     i.fputc                                  0x080031bc   Section        0  printf.o(i.fputc)
     i.main                                   0x080031f0   Section        0  main.o(i.main)
-    i.printf_init                            0x08003738   Section        0  printf.o(i.printf_init)
-    i.sin                                    0x080037b4   Section        0  sin.o(i.sin)
-    .constdata                               0x08003858   Section       48  cos_i.o(.constdata)
-    C                                        0x08003858   Data          48  cos_i.o(.constdata)
-    .constdata                               0x08003888   Section      200  rred.o(.constdata)
-    pio2s                                    0x08003888   Data          48  rred.o(.constdata)
-    twooverpi                                0x080038b8   Data         152  rred.o(.constdata)
-    .constdata                               0x08003950   Section       40  sin_i.o(.constdata)
-    S                                        0x08003950   Data          40  sin_i.o(.constdata)
+    i.printf_init                            0x080036d8   Section        0  printf.o(i.printf_init)
+    i.sin                                    0x08003754   Section        0  sin.o(i.sin)
+    .constdata                               0x080037f8   Section       48  cos_i.o(.constdata)
+    C                                        0x080037f8   Data          48  cos_i.o(.constdata)
+    .constdata                               0x08003828   Section      200  rred.o(.constdata)
+    pio2s                                    0x08003828   Data          48  rred.o(.constdata)
+    twooverpi                                0x08003858   Data         152  rred.o(.constdata)
+    .constdata                               0x080038f0   Section       40  sin_i.o(.constdata)
+    S                                        0x080038f0   Data          40  sin_i.o(.constdata)
     .data                                    0x20000000   Section       66  main.o(.data)
     .data                                    0x20000044   Section       34  can.o(.data)
     .data                                    0x20000066   Section        5  usart3.o(.data)
@@ -1694,11 +1694,11 @@ Image Symbol Table
     delay_ms                                 0x0800311d   Thumb Code    44  delay.o(i.delay_ms)
     delay_us                                 0x0800316d   Thumb Code    42  delay.o(i.delay_us)
     fputc                                    0x080031bd   Thumb Code    46  printf.o(i.fputc)
-    main                                     0x080031f1   Thumb Code  1320  main.o(i.main)
-    printf_init                              0x08003739   Thumb Code   114  printf.o(i.printf_init)
-    sin                                      0x080037b5   Thumb Code   150  sin.o(i.sin)
-    Region$$Table$$Base                      0x08003978   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08003998   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x080031f1   Thumb Code  1242  main.o(i.main)
+    printf_init                              0x080036d9   Thumb Code   114  printf.o(i.printf_init)
+    sin                                      0x08003755   Thumb Code   150  sin.o(i.sin)
+    Region$$Table$$Base                      0x08003918   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08003938   Number         0  anon$$obj.o(Region$$Table)
     MAX_PWM                                  0x20000000   Data           2  main.o(.data)
     Init                                     0x20000002   Data           1  main.o(.data)
     QA                                       0x20000008   Data           8  main.o(.data)
@@ -1742,9 +1742,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000131
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00003a20, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000039c0, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00003998, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00003938, Max: 0x00080000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1878,28 +1878,28 @@ Memory Map of the image
     0x0800311c   0x0800311c   0x00000050   Code   RO          382    i.delay_ms          delay.o
     0x0800316c   0x0800316c   0x00000050   Code   RO          383    i.delay_us          delay.o
     0x080031bc   0x080031bc   0x00000034   Code   RO          346    i.fputc             printf.o
-    0x080031f0   0x080031f0   0x00000548   Code   RO           20    i.main              main.o
-    0x08003738   0x08003738   0x0000007c   Code   RO          347    i.printf_init       printf.o
-    0x080037b4   0x080037b4   0x000000a0   Code   RO         3707    i.sin               m_ws.l(sin.o)
-    0x08003854   0x08003854   0x00000004   PAD
-    0x08003858   0x08003858   0x00000030   Data   RO         3999    .constdata          m_ws.l(cos_i.o)
-    0x08003888   0x08003888   0x000000c8   Data   RO         4017    .constdata          m_ws.l(rred.o)
-    0x08003950   0x08003950   0x00000028   Data   RO         4021    .constdata          m_ws.l(sin_i.o)
-    0x08003978   0x08003978   0x00000020   Data   RO         4073    Region$$Table       anon$$obj.o
+    0x080031f0   0x080031f0   0x000004e8   Code   RO           20    i.main              main.o
+    0x080036d8   0x080036d8   0x0000007c   Code   RO          347    i.printf_init       printf.o
+    0x08003754   0x08003754   0x000000a0   Code   RO         3707    i.sin               m_ws.l(sin.o)
+    0x080037f4   0x080037f4   0x00000004   PAD
+    0x080037f8   0x080037f8   0x00000030   Data   RO         3999    .constdata          m_ws.l(cos_i.o)
+    0x08003828   0x08003828   0x000000c8   Data   RO         4017    .constdata          m_ws.l(rred.o)
+    0x080038f0   0x080038f0   0x00000028   Data   RO         4021    .constdata          m_ws.l(sin_i.o)
+    0x08003918   0x08003918   0x00000020   Data   RO         4073    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08003998, Size: 0x000004c0, Max: 0x00010000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08003938, Size: 0x000004c0, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08003998   0x00000042   Data   RW           22    .data               main.o
-    0x20000042   0x080039da   0x00000002   PAD
-    0x20000044   0x080039dc   0x00000022   Data   RW          417    .data               can.o
-    0x20000066   0x080039fe   0x00000005   Data   RW          678    .data               usart3.o
-    0x2000006b   0x08003a03   0x00000014   Data   RW         2328    .data               stm32f10x_rcc.o
-    0x2000007f   0x08003a17   0x00000001   PAD
-    0x20000080   0x08003a18   0x00000004   Data   RW         4040    .data               mc_w.l(stdout.o)
-    0x20000084   0x08003a1c   0x00000004   Data   RW         4054    .data               mc_w.l(errno.o)
+    0x20000000   0x08003938   0x00000042   Data   RW           22    .data               main.o
+    0x20000042   0x0800397a   0x00000002   PAD
+    0x20000044   0x0800397c   0x00000022   Data   RW          417    .data               can.o
+    0x20000066   0x0800399e   0x00000005   Data   RW          678    .data               usart3.o
+    0x2000006b   0x080039a3   0x00000014   Data   RW         2328    .data               stm32f10x_rcc.o
+    0x2000007f   0x080039b7   0x00000001   PAD
+    0x20000080   0x080039b8   0x00000004   Data   RW         4040    .data               mc_w.l(stdout.o)
+    0x20000084   0x080039bc   0x00000004   Data   RW         4054    .data               mc_w.l(errno.o)
     0x20000088        -       0x0000000c   Zero   RW           21    .bss                main.o
     0x20000094        -       0x00000010   Zero   RW          416    .bss                can.o
     0x200000a4        -       0x0000000c   Zero   RW          551    .bss                ctrl.o
@@ -1914,25 +1914,25 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      1602         98          0         34         16       7051   can.o
+      1602         98          0         34         16       6827   can.o
          0          0          0          0          0         32   core_cm3.o
-       660          0          0          0         12       3418   ctrl.o
-       160         74          0          0          0       1206   delay.o
-      3344        328          0         66         12     268568   main.o
-       132         22          0          0          0       1455   misc.o
-       176         16          0          0          0       1142   printf.o
-        36          8        304          0       1024        796   startup_stm32f10x_hd.o
-      1622         22          0          0          0       6671   stm32f10x_can.o
-       448          6          0          0          0       4346   stm32f10x_gpio.o
-        26          0          0          0          0       3838   stm32f10x_it.o
-       308         38          0         20          0       4875   stm32f10x_rcc.o
-       246         42          0          0          0       3410   stm32f10x_tim.o
-       472          6          0          0          0       6591   stm32f10x_usart.o
-       328         28          0          0          0       1865   system_stm32f10x.o
-       692         66          0          5         16       3609   usart3.o
+       660          0          0          0         12       3278   ctrl.o
+       160         74          0          0          0       1166   delay.o
+      3248        318          0         66         12     268144   main.o
+       132         22          0          0          0       1391   misc.o
+       176         16          0          0          0       1098   printf.o
+        36          8        304          0       1024        772   startup_stm32f10x_hd.o
+      1622         22          0          0          0       6443   stm32f10x_can.o
+       448          6          0          0          0       4206   stm32f10x_gpio.o
+        26          0          0          0          0       3630   stm32f10x_it.o
+       308         38          0         20          0       4731   stm32f10x_rcc.o
+       246         42          0          0          0       3270   stm32f10x_tim.o
+       472          6          0          0          0       6379   stm32f10x_usart.o
+       328         28          0          0          0       1769   system_stm32f10x.o
+       692         66          0          5         16       3449   usart3.o
 
     ----------------------------------------------------------------------
-     10276        754        336        128       1080     318873   Object Totals
+     10180        744        336        128       1080     316585   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         24          0          0          3          0          0   (incl. Padding)
 
@@ -2000,15 +2000,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     14120        928        624        136       1080     316593   Grand Totals
-     14120        928        624        136       1080     316593   ELF Image Totals
-     14120        928        624        136          0          0   ROM Totals
+     14024        918        624        136       1080     314305   Grand Totals
+     14024        918        624        136       1080     314305   ELF Image Totals
+     14024        918        624        136          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                14744 (  14.40kB)
+    Total RO  Size (Code + RO Data)                14648 (  14.30kB)
     Total RW  Size (RW Data + ZI Data)              1216 (   1.19kB)
-    Total ROM Size (Code + RO Data + RW Data)      14880 (  14.53kB)
+    Total ROM Size (Code + RO Data + RW Data)      14784 (  14.44kB)
 
 ==============================================================================
 

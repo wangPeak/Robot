@@ -1,4 +1,4 @@
-//Git
+//国赛改装
 #include "main.h" 
 
 short MAX_PWM = 5000;  																//用于限制驱动器电压的PWM   5000表示  以最大电压运行
@@ -29,7 +29,7 @@ short XW_NOW_TIME = 0;
 #define R  1050                //650//平移倒角半径
 #define PI 3.1415926
 #define PULSE_1   3900						//目标脉冲数_1
-#define PULSE_2   4850						//目标脉冲数_2
+#define PULSE_2   5250						//目标脉冲数_2
 #define Opposite  +												//         	+		-      	//取反方向
 #define Opposite_XW  <										//					<		>				//取反限位   限位应与方向相对应
 #define Opposite_SD  +										//         	+		-      	//取反方向
@@ -907,16 +907,7 @@ int main()
 
 						
 					}
-					else if(Get_IO(0))
-					{
-							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
-							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
-							car.Velocity_RB = (ctrl_X_Y.Velocity_RB - ctrl_X.Velocity_RB);
-							car.Velocity_RF = (ctrl_X_Y.Velocity_RF - ctrl_X.Velocity_RF);
-							XW_NOW_X = 0;
-							XW_NOW_TIME = 0;
 
-					}
 					else if(!GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_8))
 					{
 						if(car.X Opposite_QJ 0)
@@ -935,18 +926,11 @@ int main()
 						
 						if(car.X > 0)
 						{
-							if(!Get_IO(1))
-							{
-								GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-							car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
-							car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
-							car.Velocity_RB = (ctrl_X_Y.Velocity_RB - ctrl_X.Velocity_RB);
-							car.Velocity_RF = (ctrl_X_Y.Velocity_RF - ctrl_X.Velocity_RF);
-							}
-							
-							
 
-							
+								car.Velocity_LF = (ctrl_X_Y.Velocity_LF - ctrl_X.Velocity_LF);
+								car.Velocity_LB = (ctrl_X_Y.Velocity_LB - ctrl_X.Velocity_LB);
+								car.Velocity_RB = (ctrl_X_Y.Velocity_RB - ctrl_X.Velocity_RB);
+								car.Velocity_RF = (ctrl_X_Y.Velocity_RF - ctrl_X.Velocity_RF);
 
 						}
 
@@ -964,41 +948,77 @@ int main()
 				A = 0;
 				R_NOW = 0;
 			}
-										
-			if(PULSE_NOW_2<=5)
+			
+			
+			
+		if(PULSE_NOW_2<=1)          					//伸出气缸
 			{
-					if(Get_IO(1))
+					if(!Get_IO(0))
 					{
-					GPIO_SetBits(GPIOB,GPIO_Pin_13);
+					GPIO_SetBits(GPIOB,GPIO_Pin_14);
+					}
+					else
+					{
+						GPIO_ResetBits(GPIOB,GPIO_Pin_14);
 					}
 
 
 			}
-			
-				if(Get_IO(4) && PULSE_NOW_1>=3900&& PULSE_NOW_2>=2300)
-				{
-						GPIO_ResetBits(GPIOB,GPIO_Pin_12);
-				}
-				if(!Get_IO(4) && PULSE_NOW_1>=3900)
-				{
-					GPIO_SetBits(GPIOB,GPIO_Pin_12);
-				
-				}
-
-			if(Get_IO(2))
+			else
 			{
 				GPIO_SetBits(GPIOB,GPIO_Pin_14);
 			}
-			else{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_14);
-			}
-			if(Get_IO(3))
+			
+			
+										
+			if(PULSE_NOW_2<=1)																//推出气缸
 			{
-				GPIO_SetBits(GPIOB,GPIO_Pin_15);
+					if(!Get_IO(1))
+					{
+					GPIO_SetBits(GPIOB,GPIO_Pin_13);
+					}
+					else
+					{
+						GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+					}
+
+
 			}
-			else{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_15);
+			else
+			{
+				GPIO_SetBits(GPIOB,GPIO_Pin_13);
 			}
+			
+			
+			
+			
+				
+				if(!Get_IO(4) && PULSE_NOW_1>=3900 )
+				{
+					GPIO_SetBits(GPIOB,GPIO_Pin_15);
+				
+				}
+				else if(Get_IO(4) && PULSE_NOW_1>=3900 && PULSE_NOW_2>=3300)  //抬起气缸
+				{
+						GPIO_ResetBits(GPIOB,GPIO_Pin_15);
+				}
+				
+				
+
+//			if(Get_IO(2))
+//			{
+//				GPIO_SetBits(GPIOB,GPIO_Pin_14);
+//			}
+//			else{
+//				GPIO_ResetBits(GPIOB,GPIO_Pin_14);
+//			}
+//			if(Get_IO(3))
+//			{
+//				GPIO_SetBits(GPIOB,GPIO_Pin_15);
+//			}
+//			else{
+//				GPIO_ResetBits(GPIOB,GPIO_Pin_15);
+//			}
 			
 	
 	
