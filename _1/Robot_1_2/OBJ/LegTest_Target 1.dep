@@ -1,5 +1,5 @@
 Dependencies for Project 'LegTest', Target 'Target 1': (DO NOT MODIFY !)
-F (..\USER\main.c)(0x5CEA966D)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (..\USER\main.c)(0x5CEAA211)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\FWLIB\inc -I ..\USER -I ..\OBJ -I ..\Keil -I ..\USER\bsp -I ..\USER\bsp\exti -I ..\USER\bsp\Key -I ..\USER\bsp\led -I ..\USER\bsp\usart-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\USER\main.h)(0x5CB87354)
 I (..\USER\stm32f10x.h)(0x5CB6D504)
 I (..\CORE\core_cm3.h)(0x5CB6D504)

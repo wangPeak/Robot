@@ -274,7 +274,7 @@ void TIM5_IRQHandler(void)   //TIM5中断
 							
 							
 							
-							if(PULSE_NOW_1 >= PULSE_1)
+							if(PULSE_NOW_1 >= PULSE_1 && Get_IO(5))
 							{
 									if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8))
 									{
