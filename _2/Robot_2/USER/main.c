@@ -938,7 +938,7 @@ int main()
 					case 1:																			//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 12)
+						if(((P1-JDZ)/64000) >= 9)
 						{
 							X = P3;
 							Key = 2;
@@ -950,7 +950,7 @@ int main()
 					{
 						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=5)
+						if((abs(Y)/64000)>=4)
 						{
 							JDZ = P1;
 							Key = 3;
@@ -1022,9 +1022,10 @@ int main()
 					case 8:														//RST 
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 2)
+						if(((P1-JDZ)/64000) >= 1)
 						{
 							X = P3;
+							JDZ = P1;
 							Key = RST;
 
 						}
@@ -1068,8 +1069,6 @@ int main()
 					
 					
 				}
-		// 	= 0;
-
 						if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))			//启动
 					{
 						delay_ms(1);
