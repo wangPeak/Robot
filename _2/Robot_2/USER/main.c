@@ -56,10 +56,10 @@ short XW_NOW_TIME = 0;
   uint16_t CCR1_Val = 25;
 	uint16_t CCR2_Val = 4;
 	
-	int 	Speed = 400;
-	int 	Speed_1 = 400;
-	int 	Speed_2 = 400;
-	int 	Speed_3 = 400;
+	int 	Speed = 600;
+	int 	Speed_1 = 600;
+	int 	Speed_2 = 600;
+	int 	Speed_3 = 600;
 	long 	P1 = 0;  //
 	long	P2 = 0;
 	long	P3 = 0;
@@ -68,7 +68,8 @@ short XW_NOW_TIME = 0;
 	char Init_4_Flag = 0;
 	char Init_5_Flag = 0;
 	char Init_0_Flag = 0;
-	short SD = 1500;
+	short SD = 2100;
+	int BL = 6;
 	short Init_time = 0;
 	long X = 0;
 	long Y = 0;
@@ -227,21 +228,21 @@ void TIM3_IRQHandler(void)   //TIM3中断
 								int C3T = (P3 % 64000);
 									if(C1T>=16000 && C1T<=48000)
 									{
-										C1 = ((16000 - abs((32000 - C1T)))/100)*4;
+										C1 = ((16000 - abs((32000 - C1T)))/100)*BL;
 									}else
 									{
 										C1 = 0;
 									}
 									if(C2T>=16000 && C2T<=48000)
 									{
-										C2 = ((16000 - abs((32000 - C2T)))/100)*4;
+										C2 = ((16000 - abs((32000 - C2T)))/100)*BL;
 									}else
 									{
 										C2 = 0;
 									}
 									if(C3T>=16000 && C3T<=48000)
 									{
-										C3 = ((16000 - abs((32000 - C3T)))/100)*4;
+										C3 = ((16000 - abs((32000 - C3T)))/100)*BL;
 									}else
 									{
 										C3 = 0;
@@ -938,7 +939,7 @@ int main()
 					case 1:																			//直行
 					{
 						Mode = 1;
-						if(((P1-JDZ)/64000) >= 12)
+						if(((P1-JDZ)/64000) >= 10)
 						{
 							X = P3;
 							Key = 2;
@@ -950,7 +951,7 @@ int main()
 					{
 						Mode = 4;
 						Y = P3 - X;
-						if((abs(Y)/64000)>=5)
+						if((abs(Y)/64000)>=3)
 						{
 							JDZ = P1;
 							Key = 3;
@@ -1015,6 +1016,8 @@ int main()
 							X = P3;
 							Key = 0;
 							make = 1;
+						
+						
 
 						}
 						break;
@@ -1139,6 +1142,16 @@ int main()
 								}
 						
 						
+					}
+					
+					if(make == 1)
+					{
+						Speed = 400;
+						Speed_1 = 400;
+						Speed_2 = 400;
+						Speed_3 = 400;
+						SD = 1500;
+						BL = 4;
 					}
 
 							
