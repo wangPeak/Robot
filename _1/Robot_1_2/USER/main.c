@@ -864,17 +864,26 @@ int main()
 						{
 										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 										{
-												delay_ms(1);
-												if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
+												delay_ms(2);
+											if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4) && !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+											{
+												
+											}
+												else if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4))
 												{
 													QA = -90;
 												}
 
 										}
-										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+										
+										else if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 										{
-												delay_ms(1);
-												if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+												delay_ms(2);
+											if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4) && !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
+											{
+												
+											}
+												else	if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5))
 												{
 													QA = 90;
 												}
@@ -885,7 +894,7 @@ int main()
 						{
 										if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) || !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 										{
-												delay_ms(1);
+												delay_ms(2);
 											if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) && !GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7))
 											{
 												
